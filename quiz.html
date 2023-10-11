@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+
+        .quiz-container {
+            background-color: rgb(145, 187, 174);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .options-container {
+            margin-top: 20px;
+        }
+
+        .option-btn {
+            margin: 12px;
+            padding: 10px 17px;
+            background-color: #c8f30980;
+            color: black;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .option-btn:hover {
+            background-color: #f54de77a;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="quiz-container">
+        <div id="question"></div>
+        <div id="options" class="options-container"></div>
+        <button id="next-btn" class="option-btn">Next</button>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                question: "What is the capital of india?",
+                options: ["New delhi", "Uttarakhand", "Punjab", "Rajasthan"],
+                correctAnswer: "New delhi"
+            },
+            {
+                question: "who is the president of india?",
+                options: ["Manmohan Singh", "Smriti Irani", "Droupadi Murmu", "Pratibha Patil"],
+                correctAnswer: "Droupadi Murmu"
+            },
+            {
+                question: "which state is known as land of rising sun in india?",
+                options: ["Assam", "Arunachal Pradesh", "Bihar", "Himachal Pradesh"],
+                correctAnswer: "Arunachal Pradesh"
+            },
+            {
+                question: "What is the capital of France?",
+                options: ["Paris", "London", "Berlin", "Madrid"],
+                correctAnswer: "Paris"
+            },
+            {
+                question: "Which planet is known as the Red Planet?",
+                options: ["Earth", "Mars", "Jupiter", "Saturn"],
+                correctAnswer: "Mars"
+            },
+            {
+                question: "Which planet is known as the Smallest Planet?",
+                options: ["Venus", "Mars", "Mercury", "Neptune"],
+                correctAnswer: "Mercury"
+            },
+            {
+                question: "Which planet is known as the biggest planet?",
+                options: ["Earth", "Mars", "Jupiter", "Saturn"],
+                correctAnswer: "Jupiter"
+            },
+            {
+                question: "What is the largest mammal in the world?",
+                options: ["Elephant", "Blue Whale", "Giraffe", "Hippopotamus"],
+                correctAnswer: "Blue Whale"
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        const questionElement = document.getElementById('question');
+        const optionsContainer = document.getElementById('options');
+        const nextButton = document.getElementById('next-btn');
+
+        function startQuiz() {
+            showQuestion(quizData[currentQuestionIndex]);
+        }
+
+        function showQuestion(question) {
+            questionElement.innerText = question.question;
+            optionsContainer.innerHTML = "";
+            question.options.forEach(option => {
+                const button = document.createElement('button');
+                button.innerText = option;
+                button.classList.add('option-btn');
+                button.addEventListener('click', selectOption);
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        function selectOption(event) {
+            const selectedButton = event.target;
+            const correct = selectedButton.innerText === quizData[currentQuestionIndex].correctAnswer;
+            if (correct) {
+                selectedButton.style.backgroundColor = '#4caf50';
+            } else {
+                selectedButton.style.backgroundColor = '#ff3333';
+            }
+            Array.from(optionsContainer.children).forEach(button => {
+                button.disabled = true;
+            });
+            nextButton.style.display = 'block';
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < quizData.length) {
+                resetState();
+                showQuestion(quizData[currentQuestionIndex]);
+            } else {
+                endQuiz();
+            }
+        }
+
+        function resetState() {
+            nextButton.style.display = 'none';
+            Array.from(optionsContainer.children).forEach(button => {
+                button.disabled = false;
+                button.style.backgroundColor = '#4caf50';
+            });
+        }
+
+        function endQuiz() {
+            questionElement.innerText = 'Quiz Completed!';
+            optionsContainer.innerHTML = '';
+            nextButton.style.display = 'none';
+        }
+
+        nextButton.addEventListener('click', nextQuestion);
+        startQuiz();
+    </script>
+</body>
+</html>
